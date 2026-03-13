@@ -1,0 +1,905 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guest Registration</title>
+  <style>
+    :root{
+      --bg:#f2f2f2;
+      --surface:#ffffff;
+      --surface-2:#e1e1e1;
+      --border:#d9d9d9;
+      --text:#1e1e1e;
+      --muted:#b3b3b3;
+      --brand:#2c2c2c;
+
+      --pad:24px;
+      --gap:24px;
+      --radius:8px;
+      --radius-sm:4px;
+      --shadow:0px 1px 2px rgba(0,0,0,.30), 0px 1px 3px rgba(0,0,0,.15);
+
+      /* Scanner vars (copied from scanner.html) */
+      --scanner-overlay:rgba(0,0,0,.45);
+      --scanner-radius:4px;
+    }
+
+    *{ box-sizing:border-box; }
+    html, body { height:100%; }
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    /* Centered mobile frame (matches 393px artboard) */
+    .app{
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+    }
+    .frame{
+      width:100%;
+      max-width:393px;
+      min-height:100vh;
+      background:var(--bg);
+      display:flex;
+      flex-direction:column;
+      position:relative;
+      overflow:hidden;
+    }
+
+    /* Top App Bar */
+    .topbar{
+      background:var(--surface);
+      padding:var(--pad);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .icon-btn{
+      width:24px;
+      height:24px;
+      border:0;
+      padding:0;
+      background:transparent;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+    }
+
+    .icon-btn-one{ width:16px; height:16px; display:block; }
+    .icon-btn-two{ width:20px; height:16px; display:block; }
+    .title{
+      font-weight:700;
+      font-size:20px;
+      line-height:1.2;
+      text-align:center;
+      white-space:nowrap;
+      margin:0;
+    }
+
+    /* Progress Bar */
+    .progress{
+      height:4px;
+      width:100%;
+      background:var(--surface-2);
+      display:flex;
+      overflow:hidden;
+    }
+    .step{ flex:1; }
+    .step.is-active{ background:#000; }
+
+    /* Body */
+    .content{
+      flex:1;
+      padding:var(--pad);
+      display:flex;
+      flex-direction:column;
+      gap:var(--gap);
+      overflow:auto;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      width:100%;
+    }
+    .label{
+      font-weight:600;
+      font-size:16px;
+      line-height:1.4;
+    }
+
+    .control{
+      width:100%;
+      height:40px;
+      border:1px solid var(--border);
+      border-radius:var(--radius-sm);
+      background:#fff;
+      padding:12px 16px;
+      font-size:16px;
+      line-height:1;
+      outline:none;
+    }
+    .control::placeholder{ color:var(--muted); }
+    select.control{
+      appearance:none;
+      -webkit-appearance:none;
+      -moz-appearance:none;
+      background-image: url("assets/chevron down.svg");
+      background-repeat:no-repeat;
+      background-position: right 12px center;
+      background-size:16px 16px;
+    }
+
+    .row{
+      display:flex;
+      gap:24px;
+      width:100%;
+    }
+    .row .field{ flex:1; min-width:0; }
+
+    /* Bottom App Bar */
+    .bottombar{
+      background:var(--surface);
+      padding:var(--pad);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .primary-btn{
+      width:100%;
+      border:1px solid var(--brand);
+      background:var(--brand);
+      color:#f5f5f5;
+      padding:12px;
+      border-radius:var(--radius);
+      font-size:16px;
+      line-height:1;
+      cursor:pointer;
+    }
+    .primary-btn:active{ transform: translateY(1px); }
+
+    /* Optional: nice focus */
+    .control:focus, .primary-btn:focus, .icon-btn:focus{
+      outline: 2px solid rgba(0,0,0,0.25);
+      outline-offset: 2px;
+    }
+
+    /* =========================
+       Scanner overlay (UI copied from scanner.html; no visual changes)
+       ========================= */
+    .scanner-screen{
+      position:absolute;
+      inset:0;
+      background:var(--bg);
+      display:none;
+      flex-direction:column;
+      z-index:10;
+    }
+    .scanner-screen.is-open{ display:flex; }
+
+    /* ===== Top App Bar (scanner.html styles) ===== */
+    .scanner-screen .topbar{
+      background:var(--surface);
+      padding:var(--pad);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      box-shadow:var(--shadow);
+    }
+    .scanner-screen .title{
+      font-weight:700;
+      font-size:20px;
+      margin:0;
+    }
+    .scanner-screen .icon-btn{
+      background:transparent;
+      border:0;
+      padding:4px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .scanner-screen .icon-btn img{
+      display:block;
+    }
+    img.icon-close{ width:14px; height:14px; }
+    img.icon-flash{ width:18px; height:18px; }
+
+    /* ===== Camera Area (scanner.html styles) ===== */
+    .camera-area{
+      flex:1;
+      background:#000;
+      position:relative;
+      overflow:hidden;
+      padding:0 var(--pad);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .camera-preview{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      background:#000;
+    }
+    .scan-window{
+      position:relative;
+      width:100%;
+      height:240px;
+      z-index:2;
+    }
+    .alignment-guide{
+      position:absolute;
+      inset:0;
+      border:1px solid #fff;
+      border-radius:var(--scanner-radius);
+      pointer-events:none;
+      z-index:3;
+    }
+    .scan-window::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:var(--scanner-radius);
+      box-shadow:0 0 0 9999px var(--scanner-overlay);
+      pointer-events:none;
+      z-index:2;
+    }
+    .flash-active{
+      filter:brightness(1.3);
+    }
+    
+
+    /* hidden canvas for ZXing fallback */
+    #scanCanvas{ display:none; }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <main class="frame" aria-label="Guest Registration Screen">
+      <!-- ===== Registration Screen ===== -->
+      <section id="registrationScreen" style="display:flex; flex-direction:column; min-height:100vh;">
+        <!-- Top App Bar -->
+        <header class="topbar" role="banner">
+          <button class="icon-btn" type="button" aria-label="Back">
+            <img class="icon-btn-one" src="assets/arrow_back.svg" alt="" />
+          </button>
+
+          <h1 class="title">Guest Registration</h1>
+
+          <button class="icon-btn" id="openScannerBtn" type="button" aria-label="Scan ID">
+            <img class="icon-btn-two" src="assets/barcodeIcon.svg" alt="" />
+          </button>
+        </header>
+
+        <!-- Progress Bar -->
+        <div class="progress" aria-label="Progress">
+          <div class="step is-active" aria-hidden="true"></div>
+          <div class="step" aria-hidden="true"></div>
+          <div class="step" aria-hidden="true"></div>
+          <div class="step" aria-hidden="true"></div>
+        </div>
+
+        <!-- Body -->
+        <form class="content" id="guestForm" autocomplete="on">
+          <div class="field">
+            <label class="label" for="fullName">Full Name*</label>
+            <input class="control" id="fullName" name="fullName" type="text" placeholder="Enter Full Name" required />
+          </div>
+
+          <div class="field">
+            <label class="label" for="streetAddress">Street Address*</label>
+            <input class="control" id="streetAddress" name="streetAddress" type="text" placeholder="Enter Street Address" required />
+          </div>
+
+          <div class="field">
+            <label class="label" for="city">City*</label>
+            <input class="control" id="city" name="city" type="text" placeholder="Enter City" required />
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label class="label" for="state">State*</label>
+              <select class="control" id="state" name="state" required>
+                <option value="" selected disabled>Select</option>
+                <option value="AL">Alabama</option>
+                <option value="AK">Alaska</option>
+                <option value="AZ">Arizona</option>
+                <option value="AR">Arkansas</option>
+                <option value="CA">California</option>
+                <option value="CO">Colorado</option>
+                <option value="CT">Connecticut</option>
+                <option value="DE">Delaware</option>
+                <option value="FL">Florida</option>
+                <option value="GA">Georgia</option>
+                <option value="HI">Hawaii</option>
+                <option value="ID">Idaho</option>
+                <option value="IL">Illinois</option>
+                <option value="IN">Indiana</option>
+                <option value="IA">Iowa</option>
+                <option value="KS">Kansas</option>
+                <option value="KY">Kentucky</option>
+                <option value="LA">Louisiana</option>
+                <option value="ME">Maine</option>
+                <option value="MD">Maryland</option>
+                <option value="MA">Massachusetts</option>
+                <option value="MI">Michigan</option>
+                <option value="MN">Minnesota</option>
+                <option value="MS">Mississippi</option>
+                <option value="MO">Missouri</option>
+                <option value="MT">Montana</option>
+                <option value="NE">Nebraska</option>
+                <option value="NV">Nevada</option>
+                <option value="NH">New Hampshire</option>
+                <option value="NJ">New Jersey</option>
+                <option value="NM">New Mexico</option>
+                <option value="NY">New York</option>
+                <option value="NC">North Carolina</option>
+                <option value="ND">North Dakota</option>
+                <option value="OH">Ohio</option>
+                <option value="OK">Oklahoma</option>
+                <option value="OR">Oregon</option>
+                <option value="PA">Pennsylvania</option>
+                <option value="RI">Rhode Island</option>
+                <option value="SC">South Carolina</option>
+                <option value="SD">South Dakota</option>
+                <option value="TN">Tennessee</option>
+                <option value="TX">Texas</option>
+                <option value="UT">Utah</option>
+                <option value="VT">Vermont</option>
+                <option value="VA">Virginia</option>
+                <option value="WA">Washington</option>
+                <option value="WV">West Virginia</option>
+                <option value="WI">Wisconsin</option>
+                <option value="WY">Wyoming</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label class="label" for="zip">Zip Code*</label>
+              <input
+                class="control"
+                id="zip"
+                name="zip"
+                type="text"
+                inputmode="numeric"
+                pattern="^\d{5}$"
+                maxlength="5"
+                placeholder="5-digit ZIP code"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label class="label" for="gender">Gender*</label>
+              <select class="control" id="gender" name="gender" required>
+                <option value="" selected disabled>Select</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label class="label" for="age">Age*</label>
+              <input
+                class="control"
+                id="age"
+                name="age"
+                type="number"
+                min="0"
+                max="120"
+                placeholder="00"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="idType">Type of Identification</label>
+            <select class="control" id="idType" name="idType">
+              <option value="" selected disabled>Select</option>
+              <option value="DL">DL</option>
+              <option value="ID">ID</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label class="label" for="idNumber">Identification Number*</label>
+            <input class="control" id="idNumber" name="idNumber" type="text" placeholder="0000000000" required />
+          </div>
+        </form>
+
+        <!-- Bottom App Bar -->
+        <footer class="bottombar" role="contentinfo">
+          <button class="primary-btn" type="button">Next</button>
+        </footer>
+      </section>
+
+      <!-- ===== Scanner Screen (UI kept the same as scanner.html) ===== -->
+      <section id="scannerScreen" class="scanner-screen" aria-label="Scanner Screen">
+        <header class="topbar">
+          <button class="icon-btn" id="closeBtn" aria-label="Close" type="button">
+            <img
+              class="icon-close"
+              src="assets/close.svg"
+              alt=""
+            />
+          </button>
+
+          <h1 class="title">Scanner</h1>
+
+          <button
+            class="icon-btn"
+            id="flashBtn"
+            aria-label="Toggle Flash"
+            aria-pressed="false"
+            type="button"
+          >
+            <img
+              class="icon-flash"
+              src="assets/flash_off.svg"
+              alt=""
+            />
+          </button>
+        </header>
+
+        <section class="camera-area">
+          <video id="camera" class="camera-preview" autoplay playsinline muted></video>
+
+          <div class="scan-window">
+            <div class="alignment-guide"></div>
+          </div>
+        </section>
+
+        <canvas id="scanCanvas"></canvas>
+      </section>
+    </main>
+  </div>
+
+<script>
+(() => {
+  // =========================
+  // UI plumbing
+  // =========================
+  const $ = (id) => document.getElementById(id);
+
+  const scannerScreen = $("scannerScreen");
+  const registrationScreen = $("registrationScreen");
+
+  const openScannerBtn = $("openScannerBtn");
+  const closeBtn = $("closeBtn");
+  const flashBtn = $("flashBtn");
+  const video = $("camera");
+
+  // Form fields (IDs provided by you)
+  const fullNameEl = $("fullName");
+  const streetEl   = $("streetAddress");
+  const cityEl     = $("city");
+  const stateEl    = $("state");
+  const zipEl      = $("zip");
+  const genderEl   = $("gender");
+  const ageEl      = $("age");
+  const idTypeEl   = $("idType");
+  const idNumEl    = $("idNumber");
+
+  // Scanner state
+  let stream = null;
+  let track = null;
+  let torchOn = false;
+
+  // Engine state (from scannerExample.html)
+  let detector = null;
+  let zxing = null;
+  let zxingReader = null;
+
+  let stopLoop = true;
+  let lastText = "";
+  let lastAt = 0;
+
+  // Tuning
+  const FPS_MS = 120;     // ~8 fps
+  const DUP_MS = 1600;
+  const ROI_W = 0.90;     // center crop
+  const ROI_H = 0.55;
+
+  const canvas = $("scanCanvas");
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+
+  function openScanner() {
+    scannerScreen.classList.add("is-open");
+    // Registration remains mounted beneath; this matches "scanner opens" feel.
+    startCameraAndScan();
+  }
+
+  function closeScanner() {
+    stopCamera();
+    scannerScreen.classList.remove("is-open");
+  }
+
+  openScannerBtn.addEventListener("click", openScanner);
+  closeBtn.addEventListener("click", closeScanner);
+
+  // =========================
+  // Torch toggle (keep behavior from scanner.html)
+  // =========================
+  flashBtn.addEventListener("click", async () => {
+    if (!track) return;
+
+    try {
+      const capabilities = track.getCapabilities?.() || {};
+      if (!capabilities.torch) {
+        alert("Flash not supported on this device.");
+        return;
+      }
+
+      torchOn = !torchOn;
+
+      await track.applyConstraints({ advanced: [{ torch: torchOn }] });
+
+      flashBtn.classList.toggle("flash-active", torchOn);
+      flashBtn.setAttribute("aria-pressed", String(torchOn));
+    } catch (err) {
+      console.error("Torch error:", err);
+      alert("Unable to toggle flash on this device.");
+    }
+  });
+
+  // =========================
+  // Engine selection (BarcodeDetector pdf417 -> ZXing)
+  // =========================
+  async function initEngineIfNeeded() {
+    if (detector || zxingReader) return;
+
+    if ("BarcodeDetector" in window) {
+      try {
+        const formats = await window.BarcodeDetector.getSupportedFormats?.();
+        const supportsPdf417 = Array.isArray(formats) && formats.includes("pdf417");
+        if (supportsPdf417) {
+          detector = new BarcodeDetector({ formats: ["pdf417"] });
+          return;
+        }
+      } catch {
+        // fall through to ZXing
+      }
+    }
+
+    // ZXing fallback via ESM import
+    zxing = await import("https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/+esm");
+    zxingReader = new zxing.BrowserMultiFormatReader();
+
+    const hints = new Map();
+    hints.set(zxing.DecodeHintType.POSSIBLE_FORMATS, [zxing.BarcodeFormat.PDF_417]);
+    zxingReader.hints = hints;
+  }
+
+  // =========================
+  // Camera control
+  // =========================
+  async function startCamera() {
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: { ideal: "environment" },
+        width: { ideal: 1920 },
+        height: { ideal: 1080 }
+      },
+      audio: false
+    });
+
+    video.srcObject = stream;
+    await video.play();
+
+    track = stream.getVideoTracks?.()?.[0] || null;
+
+    // Keep UI consistent with scanner.html:
+    // if torch isn't available, still allow click but show alert from handler.
+  }
+
+  function stopCamera() {
+    stopLoop = true;
+    torchOn = false;
+
+    try { video.pause(); } catch {}
+    try { video.srcObject = null; } catch {}
+
+    if (stream) {
+      stream.getTracks().forEach(t => t.stop());
+      stream = null;
+    }
+    track = null;
+
+    flashBtn.classList.remove("flash-active");
+    flashBtn.setAttribute("aria-pressed", "false");
+  }
+
+  async function startCameraAndScan() {
+    if (!navigator.mediaDevices?.getUserMedia) {
+      alert("This browser doesn’t support camera access.");
+      closeScanner();
+      return;
+    }
+
+    stopLoop = false;
+
+    try {
+      await initEngineIfNeeded();
+      await startCamera();
+      scanLoop();
+    } catch (err) {
+      console.error("Camera/start error:", err);
+      alert("Unable to access camera. Please allow camera permission.");
+      closeScanner();
+    }
+  }
+
+  // =========================
+  // AAMVA parsing + mapping rules
+  // =========================
+  function parseAamva(raw) {
+    // Normalize line breaks
+    let text = (raw || "")
+      .replace(/\r\n/g, "\n")
+      .replace(/\r/g, "\n")
+      // Some SDKs include record/field separators as ASCII control chars
+      .replace(/[\x1e\x1d\x1c]/g, "\n");
+
+    // Many scanners concatenate the AAMVA subfile designator ("DL" or "ID")
+    // directly with the first element (e.g., "DLDAQ..."). Insert a newline so
+    // element parsing can work reliably.
+    text = text
+      // At line starts: "DLDAQ" -> "DL\nDAQ"
+      .replace(/(^|[\n\r])\s*(DL|ID)(?=[A-Z]{3})/g, "$1$2\n")
+      // After the AAMVA header blob: "...@...DLDAQ" -> "...DL\nDAQ"
+      .replace(/(@[\s\S]{0,200}?)(DL|ID)(?=[A-Z]{3})/g, "$1$2\n");
+
+    // Extract 3-letter elements (e.g., "DCS", "DAC") and their values.
+    // Many PDFs contain headers; we just scan all lines.
+    const fields = {};
+    for (const line of text.split("\n")) {
+      const m = line.match(/^([A-Z]{3})(.*)$/);
+      if (m) {
+        const code = m[1];
+        const val = (m[2] || "").trim();
+        if (val && fields[code] == null) fields[code] = val;
+      }
+    }
+
+    // Some scanners return everything in one long string.
+    // As a fallback, also regex-search for codes anywhere.
+    const re = /\b([A-Z]{3})([^\n\r]*)/g;
+    let mm;
+    while ((mm = re.exec(text)) !== null) {
+      const code = mm[1];
+      const val = (mm[2] || "").trim();
+      if (val && fields[code] == null) fields[code] = val;
+    }
+
+    return fields;
+  }
+
+  function computeAgeFromDOB(dobStr) {
+    if (!dobStr) return null;
+    const digits = dobStr.replace(/\D/g, "");
+    if (digits.length < 8) return null;
+
+    let year, month, day;
+    const first4 = parseInt(digits.slice(0,4), 10);
+    if (first4 >= 1900 && first4 <= 2099) {
+      // YYYYMMDD
+      year = first4;
+      month = parseInt(digits.slice(4,6), 10);
+      day = parseInt(digits.slice(6,8), 10);
+    } else {
+      // MMDDYYYY
+      month = parseInt(digits.slice(0,2), 10);
+      day = parseInt(digits.slice(2,4), 10);
+      year = parseInt(digits.slice(4,8), 10);
+    }
+
+    if (!year || !month || !day) return null;
+
+    const today = new Date();
+    let age = today.getFullYear() - year;
+    const m = today.getMonth() + 1;
+    const d = today.getDate();
+    if (m < month || (m === month && d < day)) age -= 1;
+    if (age < 0 || age > 130) return null;
+    return age;
+  }
+
+  function normalizeZip(zipRaw) {
+    if (!zipRaw) return "";
+    const digits = zipRaw.replace(/\D/g, "");
+    return digits.slice(0, 5);
+  }
+
+  function normalizeGender(gRaw) {
+    if (!gRaw) return "";
+    const v = String(gRaw).trim().toUpperCase();
+    if (v === "1" || v === "M" || v === "MALE") return "Male";
+    if (v === "2" || v === "F" || v === "FEMALE") return "Female";
+    // 9 / X / unknown etc.
+    return "Other";
+  }
+
+  function deriveIdType(raw) {
+  if (!raw) return "";
+
+  // Normalize to a single string with no whitespace/control chars
+  const t = String(raw)
+    .replace(/\r\n/g, "\n")
+    .replace(/\r/g, "\n")
+    .replace(/[\x1e\x1d\x1c]/g, "\n")
+    .toUpperCase();
+
+  // Remove all whitespace/newlines so the header becomes contiguous like the spec
+  const compact = t.replace(/\s+/g, "");
+
+  /**
+   * Header shape (AAMVA):
+   * "ANSI" + IIN(6) + AAMVAver(2) + JurisVer(2) + Entries(2) + [Subfile(2)+Offset(4)+Len(4)] * entries
+   *
+   * Example:
+   * ANSI 636000 11 00 02  DL 0041 0278  ZV 0319 0008
+   * => "ANSI636000110002DL00410278ZV03190008"
+   */
+  const m = compact.match(/ANSI([0-9]{6})([0-9]{2})([0-9]{2})([0-9]{2})(.*)/);
+  if (!m) return "";
+
+  const entries = parseInt(m[4], 10);
+  if (!Number.isFinite(entries) || entries <= 0) return "";
+
+  const table = m[5] || "";
+
+  // Walk subfile table in 10-char chunks: TT + OOOO + LLLL
+  for (let i = 0; i < entries; i++) {
+    const start = i * 10;
+    if (start + 10 > table.length) break;
+
+    const type = table.slice(start, start + 2);      // TT
+    // const offset = table.slice(start + 2, start + 6); // OOOO (unused)
+    // const len = table.slice(start + 6, start + 10);   // LLLL (unused)
+
+    if (type === "DL" || type === "ID") return type;
+  }
+
+  return "";
+}
+
+  function fillFormFromScan(rawText) {
+    const f = parseAamva(rawText);
+
+    // Full name: DAC (first), DAD (middle), DCS (last)
+    const first = (f.DAC || "").trim();
+    const middle = (f.DAD || "").trim();
+    const last = (f.DCS || "").trim();
+    const name = [first, middle, last].filter(Boolean).join(" ").replace(/\s+/g, " ").trim();
+
+    const street = (f.DAG || "").trim();
+    const city = (f.DAI || "").trim();
+    const state = (f.DAJ || "").trim().toUpperCase();
+    const zip = normalizeZip(f.DAK || "");
+
+    const gender = normalizeGender(f.DBC || "");
+    const age = computeAgeFromDOB(f.DBB || "");
+
+    const idNumber = (f.DAQ || "").trim();
+    const idType = deriveIdType(rawText);
+
+    if (name) fullNameEl.value = name;
+    if (street) streetEl.value = street;
+    if (city) cityEl.value = city;
+
+    // State dropdown: expects 2-letter abbreviation
+    if (state && stateEl.querySelector(`option[value="${state}"]`)) {
+      stateEl.value = state;
+    }
+
+    if (zip) zipEl.value = zip;
+
+    if (gender && genderEl.querySelector(`option[value="${gender}"]`)) {
+      genderEl.value = gender;
+    }
+
+    if (age != null && age !== "") ageEl.value = String(age);
+
+    if (idType && idTypeEl.querySelector(`option[value="${idType}"]`)) {
+      idTypeEl.value = idType;
+    }
+
+    if (idNumber) idNumEl.value = idNumber;
+
+    // Trigger input events (useful if other code listens to changes)
+    for (const el of [fullNameEl, streetEl, cityEl, stateEl, zipEl, genderEl, ageEl, idTypeEl, idNumEl]) {
+      el.dispatchEvent(new Event("input", { bubbles: true }));
+      el.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+  }
+
+  // =========================
+  // Scan loop (from scannerExample.html, adapted to scanner.html UI)
+  // =========================
+  function publish(text) {
+    const now = Date.now();
+    if (!text) return;
+    if (text === lastText && (now - lastAt) < DUP_MS) return;
+
+    lastText = text;
+    lastAt = now;
+
+    // Auto-fill + close scanner
+    try {
+      fillFormFromScan(text);
+      navigator.vibrate?.(25);
+    } catch (e) {
+      console.error("Autofill error:", e);
+    }
+
+    closeScanner();
+  }
+
+  async function scanLoop() {
+    if (stopLoop) return;
+
+    try {
+      await initEngineIfNeeded();
+
+      if (detector) {
+        const codes = await detector.detect(video);
+        if (codes?.length) publish(codes[0].rawValue || "");
+      } else if (zxingReader && zxing) {
+        if (video.readyState >= 2) {
+          const w = video.videoWidth;
+          const h = video.videoHeight;
+
+          const cropW = Math.floor(w * ROI_W);
+          const cropH = Math.floor(h * ROI_H);
+          const sx = Math.floor((w - cropW) / 2);
+          const sy = Math.floor((h - cropH) / 2);
+
+          canvas.width = cropW;
+          canvas.height = cropH;
+          ctx.drawImage(video, sx, sy, cropW, cropH, 0, 0, cropW, cropH);
+
+          const imageData = ctx.getImageData(0, 0, cropW, cropH);
+
+          const luminance = new zxing.RGBLuminanceSource(imageData.data, cropW, cropH);
+          const binarizer = new zxing.HybridBinarizer(luminance);
+          const bitmap = new zxing.BinaryBitmap(binarizer);
+
+          try {
+            const res = zxingReader.decodeBitmap(bitmap);
+            publish(res?.getText?.() || "");
+          } catch {
+            // expected when nothing found
+          }
+        }
+      }
+    } catch {
+      // keep scanning
+    }
+
+    setTimeout(scanLoop, FPS_MS);
+  }
+
+  // Best-effort cleanup if user navigates away
+  window.addEventListener("beforeunload", stopCamera);
+})();
+</script>
+
+</body>
+</html>

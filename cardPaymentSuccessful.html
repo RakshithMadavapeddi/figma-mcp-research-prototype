@@ -1,0 +1,244 @@
+<!-- cardPaymentSuccessful.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Successful</title>
+
+  <style>
+    :root{
+      --page:#f2f2f2;
+      --success:#dbf4cf;
+      --surface:#ffffff;
+      --text:#1e1e1e;
+      --divider:#bfbfbf;
+      --brand:#2c2c2c;
+
+      --pad:24px;
+      --gap:48px;
+
+      --radius-sm:4px;
+      --radius:8px;
+
+      --shadow:0px 1px 2px rgba(0,0,0,.30), 0px 1px 3px rgba(0,0,0,.15);
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
+
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:var(--page);
+      color:var(--text);
+    }
+
+    /* Centered mobile frame (393px artboard) */
+    .app{
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      background:var(--page);
+    }
+    .frame{
+      width:100%;
+      max-width:393px;
+      min-height:100vh;
+      background:var(--page);
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* Success canvas area */
+    .canvas{
+      flex:1;
+      background:var(--success);
+      padding:var(--pad);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:var(--gap);
+      overflow:hidden;
+    }
+
+    .hero{
+      display:flex;
+      justify-content: center;
+      align-items:center;
+      background-color: white;
+      width:64px;
+      height:64px;
+      border-radius:50%;
+    }
+    .hero img{
+      width:22px;
+      height:16px;
+      display:block;
+    }
+    .hero-title{
+      margin:0;
+      font-weight:600;
+      font-size:16px;
+      line-height:1.2;
+      letter-spacing:.5px;
+      color:#000;
+      white-space:nowrap;
+    }
+
+    .stack{
+      width:100%;
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+
+    .card{
+      width:100%;
+      background:var(--surface);
+      border-radius:var(--radius-sm);
+      box-shadow:var(--shadow);
+      padding:24px 16px;
+      display:flex;
+      flex-direction:column;
+      gap:24px;
+      overflow:hidden;
+    }
+
+    .row{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      white-space:nowrap;
+    }
+
+    .left{
+      font-weight:600;
+      font-size:16px;
+      line-height:1.2;
+      letter-spacing:.5px;
+      color:#000;
+    }
+
+    .right{
+      font-weight:400;
+      font-size:16px;
+      line-height:1;
+      color:var(--text);
+      text-align:right;
+      max-width:60%;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .divider{
+      width:100%;
+      height:1px;
+      background:var(--divider);
+      flex:0 0 auto;
+    }
+
+    /* Bottom App Bar */
+    .bottombar{
+      background:var(--surface);
+      padding:var(--pad);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .primary-btn{
+      width:100%;
+      border:1px solid var(--brand);
+      background:var(--brand);
+      color:#f5f5f5;
+      padding:12px;
+      border-radius:var(--radius);
+      font-size:16px;
+      line-height:1;
+      cursor:pointer;
+    }
+
+    .primary-btn:active{ transform: translateY(1px); }
+    .primary-btn:focus{
+      outline:2px solid rgba(0,0,0,.25);
+      outline-offset:2px;
+    }
+
+    .bars{
+      display:flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items:center;
+      gap: 18px;
+      width:148x;
+      height:101px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <main class="frame" aria-label="Card Payment Successful Screen">
+      <section class="canvas" aria-label="Payment successful content">
+        <!-- Header -->
+        <div class="bars">
+          <div class="hero" aria-label="Success header">
+            <img
+              src="assets/check.svg"
+              alt=""
+            />
+          </div>
+          <p class="hero-title">Payment Successful</p>
+        </div>
+
+        <!-- Details -->
+        <div class="stack" aria-label="Receipt details">
+          <div class="card" role="group" aria-label="Transaction details">
+            <div class="row">
+              <div class="left">Guest</div>
+              <div class="right">Full Name</div>
+            </div>
+
+            <div class="row">
+              <div class="left">Room Number</div>
+              <div class="right">000</div>
+            </div>
+
+            <div class="divider" aria-hidden="true"></div>
+
+            <div class="row">
+              <div class="left">Booking ID</div>
+              <div class="right">0000000000</div>
+            </div>
+
+            <div class="row">
+              <div class="left">Transaction Type</div>
+              <div class="right">Debit/Credit/NFC</div>
+            </div>
+
+            <div class="row">
+              <div class="left">Transaction ID</div>
+              <div class="right">0000000000000</div>
+            </div>
+          </div>
+
+          <div class="card" role="group" aria-label="Total amount">
+            <div class="row">
+              <div class="left">Total Amount</div>
+              <div class="right">$ 00.00</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bottom App Bar -->
+      <footer class="bottombar" role="contentinfo">
+        <button class="primary-btn" type="button">Print Receipt</button>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

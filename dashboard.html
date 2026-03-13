@@ -1,0 +1,278 @@
+<!-- dashboard.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - Example XYZ Hotels</title>
+  <style>
+    :root{
+      --bg: #f2f2f2;
+      --surface: #ffffff;
+      --surface-muted: #d9d9d9;
+      --border: #d1d1d1;
+      --text: #1e1e1e;
+      --text-muted: #b3b3b3;
+      --divider: #bfbfbf;
+
+      --radius: 8px;
+      --shadow: 0px 1px 2px rgba(0,0,0,.30), 0px 1px 3px rgba(0,0,0,.15);
+      --pad: 24px;
+      --gap: 24px;
+    }
+
+    *{ box-sizing: border-box; }
+    html, body { height: 100%; }
+    body{
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    /* Frame sized like the Figma mobile artboard, but centered & responsive */
+    .app{
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
+    .frame{
+      width: 100%;
+      max-width: 393px;
+      min-height: 100vh;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    .topbar{
+      background: var(--surface);
+      padding: var(--pad);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .brand{
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+    .top-actions{
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .icon-btn{
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
+    }
+    .icon-one{
+      width: 20px;
+      height: 20px;
+      display: block;
+    }
+    .icon-two{
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
+
+
+    /* Content */
+    .content{
+      flex: 1;
+      padding: var(--pad);
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap);
+      overflow: hidden;
+    }
+
+    .body{
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap);
+    }
+
+    .greeting{
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 1.2;
+      text-align: left;
+      letter-spacing: 0.5px;
+      margin: 0;
+    }
+
+    /* Cards / Buttons */
+    .card{
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 56px;
+      text-align: center;
+      height: 100%;
+    }
+    .card.primary{
+      background: var(--surface);
+      min-width: 240px;
+    }
+    .card.muted{ background: var(--surface-muted); height: 100%; }
+
+    .card-title{
+      margin: 0;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 1.4;
+      width: 100%;
+    }
+
+    .divider{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      width: 100%;
+    }
+    .divider-line{
+      height: 1px;
+      background: var(--divider);
+      flex: 1;
+      min-width: 1px;
+    }
+    .divider-text{
+      font-size: 16px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .grid2{
+      display: flex;
+      gap: 24px;
+      width: 100%;
+      height: 100%;
+    }
+    .grid2 .card{
+      flex: 1;
+      height: 100%;
+    }
+
+    /* Footer */
+    .footer{
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+    .version{
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.2;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    /* Optional: nice hover */
+    .card[role="button"]{
+      cursor: pointer;
+      user-select: none;
+      transition: transform 120ms ease, filter 120ms ease;
+    }
+    .card[role="button"]:hover{ transform: translateY(-1px); filter: brightness(1.02); }
+    .card[role="button"]:active{ transform: translateY(0px); filter: brightness(0.99); }
+  </style>
+</head>
+<!-- Scenario Menu modal host (modal is injected here by app.js; no visible UI) -->
+<div id="scenarioModalContainer" aria-hidden="true"></div>
+<body>
+  <div class="app">
+    <main class="frame" aria-label="Dashboard">
+      <!-- Header -->
+      <header class="topbar">
+        <div class="brand" id="scenarioTrigger" data-scenario-trigger="true">Example XYZ Hotels</div>
+        
+
+        <nav class="top-actions" aria-label="Header actions">
+          <button class="icon-btn" type="button" aria-label="Account">
+            <img
+              src="assets/account_circle.svg"
+              class="icon-one"
+              alt=""
+            />
+          </button>
+
+          <button class="icon-btn" type="button" aria-label="Logout">
+            <img
+              src="assets/logout.svg"
+              class="icon-two"
+              alt=""
+            />
+          </button>
+        </nav>
+      </header>
+
+      <!-- Content -->
+      <section class="content">
+        <div class="body">
+          <p class="greeting">Good Afternoon, John Doe.</p>
+
+          <div class="card primary" role="button" tabindex="0" aria-label="Check-In">
+            <p class="card-title">Check-In</p>
+          </div>
+
+          <div class="card muted" role="button" tabindex="0" aria-label="Check-Out">
+            <p class="card-title">Check-Out</p>
+          </div>
+
+          <div class="card muted" role="button" tabindex="0" aria-label="Stay-Over" style="width:100%;">
+            <p class="card-title">Stay-Over</p>
+          </div>
+
+          <div class="divider" aria-hidden="true">
+            <div class="divider-line"></div>
+            <div class="divider-text">Other</div>
+            <div class="divider-line"></div>
+          </div>
+
+          <div class="grid2">
+            <div class="card muted" role="button" tabindex="0" aria-label="Dashboard">
+              <p class="card-title">Dashboard</p>
+            </div>
+
+            <div class="card muted" role="button" tabindex="0" aria-label="Bookings">
+              <p class="card-title">Bookings</p>
+            </div>
+          </div>
+
+          <div class="grid2">
+            <div class="card muted" role="button" tabindex="0" aria-label="Reports">
+              <p class="card-title">Reports</p>
+            </div>
+
+            <div class="card muted" role="button" tabindex="0" aria-label="Payments">
+              <p class="card-title">Payments</p>
+            </div>
+          </div>
+        </div>
+
+        <footer class="footer">
+          <p class="version">Version 1.0</p>
+        </footer>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

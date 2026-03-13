@@ -1,0 +1,294 @@
+<!-- bookingSummary.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Booking Summary</title>
+
+  <style>
+    :root{
+      --bg:#f2f2f2;
+      --surface:#ffffff;
+      --text:#1e1e1e;
+      --divider:#bfbfbf;
+      --brand:#2c2c2c;
+
+      --pad:24px;
+      --gap:24px;
+      --radius-sm:4px;
+      --radius:8px;
+
+      --shadow:0px 1px 2px rgba(0,0,0,.30), 0px 1px 3px rgba(0,0,0,.15);
+
+      --progress-bg:#e1e1e1;
+      --progress-fill:#000;
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    /* Centered mobile frame (393px artboard) */
+    .app{
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+    }
+    .frame{
+      width:100%;
+      max-width:393px;
+      min-height:100vh;
+      background:var(--bg);
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* Top App Bar */
+    .topbar{
+      background:var(--surface);
+      padding:var(--pad);
+      box-shadow:var(--shadow);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      overflow:hidden;
+    }
+    .icon-btn{
+      border:0;
+      background:transparent;
+      padding:0;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:6px;
+      flex:0 0 auto;
+    }
+    .icon-btn:focus{
+      outline:2px solid rgba(0,0,0,.25);
+      outline-offset:2px;
+    }
+    .icon-btn.back img{
+      width:16px;
+      height:16px;
+      display:block;
+    }
+    .icon-btn.close{
+      width:24px;
+      height:24px;
+    }
+    .icon-btn.close img{
+      width:14px;
+      height:14px;
+      display:block;
+    }
+
+    .title{
+      margin:0;
+      font-weight:700;
+      font-size:20px;
+      line-height:1.2;
+      text-align:center;
+      white-space:nowrap;
+      flex:1 1 auto;
+    }
+
+    /* Progress Bar (Steps 1–3 filled) */
+    .progress{
+      height:4px;
+      width:100%;
+      background:var(--progress-bg);
+      display:flex;
+      overflow:hidden;
+    }
+    .step{ flex:1; }
+    .step.filled{ background:var(--progress-fill); }
+
+    /* Body */
+    .content{
+      flex:1;
+      padding:var(--pad);
+      overflow:auto;
+      display:flex;
+      flex-direction:column;
+      gap:var(--gap);
+    }
+
+    .card{
+      width:100%;
+      background:var(--surface);
+      border-radius:var(--radius-sm);
+      box-shadow:var(--shadow);
+      padding:24px 16px;
+      display:flex;
+      flex-direction:column;
+      gap:24px;
+      overflow:hidden;
+    }
+
+    .row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      white-space:nowrap;
+      width:100%;
+    }
+
+    .left{
+      font-weight:600;
+      font-size:16px;
+      line-height:1.2;
+      letter-spacing:.5px;
+      color:#000;
+    }
+
+    .right{
+      font-weight:400;
+      font-size:16px;
+      line-height:1;
+      color:var(--text);
+      text-align:right;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width:60%;
+    }
+
+    /* Bottom App Bar */
+    .bottombar{
+      background:var(--surface);
+      padding:var(--pad);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .buttons{
+      display:flex;
+      gap:24px;
+      width:100%;
+    }
+    .btn{
+      flex:1;
+      border:1px solid var(--brand);
+      background:var(--brand);
+      color:#f5f5f5;
+      padding:12px;
+      border-radius:var(--radius);
+      font-size:16px;
+      line-height:1;
+      cursor:pointer;
+    }
+    .btn:active{ transform: translateY(1px); }
+    .btn:focus{
+      outline:2px solid rgba(0,0,0,.25);
+      outline-offset:2px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <main class="frame" aria-label="Booking Summary Screen">
+      <!-- Top App Bar -->
+      <header class="topbar" role="banner" aria-label="Top App Bar">
+        <button class="icon-btn back" type="button" aria-label="Back">
+          <img
+            src="assets/arrow_back.svg"
+            alt=""
+          />
+        </button>
+
+        <h1 class="title">Booking Summary</h1>
+
+        <button class="icon-btn close" type="button" aria-label="Close">
+          <img
+            src="assets/close.svg"
+            alt=""
+          />
+        </button>
+      </header>
+
+      <!-- Progress Bar -->
+      <div class="progress" aria-label="Progress">
+        <div class="step filled" aria-hidden="true"></div>
+        <div class="step filled" aria-hidden="true"></div>
+        <div class="step filled" aria-hidden="true"></div>
+        <div class="step" aria-hidden="true"></div>
+      </div>
+
+      <!-- Body -->
+      <section class="content" aria-label="Booking summary">
+        <!-- Summary Card -->
+        <div class="card" role="group" aria-label="Booking details">
+          <div class="row">
+            <div class="left">Guest</div>
+            <div class="right">Full Name</div>
+          </div>
+
+          <div class="row">
+            <div class="left">Check-in</div>
+            <div class="right">Time and Date</div>
+          </div>
+
+          <div class="row">
+            <div class="left">Check-out</div>
+            <div class="right">Time and Date</div>
+          </div>
+
+          <div class="row">
+            <div class="left">No. of Days</div>
+            <div class="right">00</div>
+          </div>
+
+          <div class="row">
+            <div class="left">Room Number</div>
+            <div class="right">000</div>
+          </div>
+
+          <div class="row">
+            <div class="left">Guests</div>
+            <div class="right">00</div>
+          </div>
+
+          <div class="row">
+            <div class="left">Daily Rate</div>
+            <div class="right">$ 00.00</div>
+          </div>
+
+          <div class="row">
+            <div class="left">Deposit</div>
+            <div class="right">$ 00.00</div>
+          </div>
+
+          <div class="row">
+            <div class="left">Discount</div>
+            <div class="right">$ 00.00</div>
+          </div>
+        </div>
+
+        <!-- Total Card -->
+        <div class="card" role="group" aria-label="Total amount">
+          <div class="row">
+            <div class="left">Total Amount</div>
+            <div class="right">$ 00.00</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bottom App Bar -->
+      <footer class="bottombar" role="contentinfo">
+        <div class="buttons">
+          <button class="btn" type="button">Cash</button>
+          <button class="btn" type="button">Card</button>
+        </div>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

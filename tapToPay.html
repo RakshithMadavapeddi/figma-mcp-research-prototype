@@ -1,0 +1,219 @@
+<!-- tapToPay.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tap to Pay</title>
+
+  <style>
+    :root{
+      --bg:#e8e8e8;
+      --surface:#ffffff;
+      --text:#1e1e1e;
+      --brand:#2c2c2c;
+
+      --pad:24px;
+      --gap:24px;
+      --gap-lg:48px;
+
+      --radius-sm:4px;
+      --shadow:0px 1px 2px rgba(0,0,0,.30), 0px 1px 3px rgba(0,0,0,.15);
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:#fff;
+      color:var(--text);
+    }
+
+    /* Centered mobile frame */
+    .app{
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      background:#fff;
+    }
+    .frame{
+      width:100%;
+      max-width:393px;
+      min-height:100vh;
+      background:#fff;
+      position:relative;
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* Grey canvas area */
+    .canvas{
+      flex:1;
+      background:var(--bg);
+      padding:var(--pad);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:var(--gap-lg);
+      position:relative;
+      overflow:hidden;
+    }
+
+    /* Close button (absolute) */
+    .close-btn{
+      position:absolute;
+      top:26px;
+      left:323px; /* matches Figma absolute positioning in 393px frame */
+      width:46px;
+      height:46px;
+      border:0;
+      background:transparent;
+      padding:0;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:50%;
+      background-color: #ffffff;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.30), 0 1px 3px 1px rgba(0, 0, 0, 0.15);
+    }
+
+
+    .close-btn img{
+      height: 14px;
+      width: px;
+    }
+      /* M3/Elevation Light/1 */
+      
+    .close-btn:focus{
+      outline:2px solid rgba(0,0,0,.25);
+      outline-offset:2px;
+    }
+
+    /* Header icon + title */
+    .hero{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:var(--gap);
+    }
+    .hero-icon{
+      width:48px;
+      height:48px;
+      display:block;
+    }
+    .hero-title{
+      margin:0;
+      font-weight:600;
+      font-size:20px;
+      line-height:1.2;
+      letter-spacing:.5px;
+      color:#000;
+      text-align:center;
+      white-space:nowrap;
+    }
+
+    /* Cards stack */
+    .stack{
+      width:100%;
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+
+    .card{
+      width:100%;
+      background:var(--surface);
+      border-radius:var(--radius-sm);
+      box-shadow:var(--shadow);
+      padding:24px 16px;
+      display:flex;
+      flex-direction:column;
+      gap:24px;
+      overflow:hidden;
+    }
+
+    .row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      width:100%;
+      white-space:nowrap;
+    }
+
+    .left{
+      font-weight:600;
+      font-size:16px;
+      line-height:1.2;
+      letter-spacing:.5px;
+      color:#000;
+    }
+
+    .right{
+      font-weight:400;
+      font-size:16px;
+      line-height:1;
+      color:var(--text);
+      text-align:right;
+      max-width:60%;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <main class="frame" aria-label="Tap to Pay Screen">
+      <section class="canvas" aria-label="Tap to Pay content">
+        <!-- Close -->
+         <div class="beats">
+
+          <button class="close-btn" type="button" aria-label="Close">
+            <img
+              src="assets/close.svg"
+              alt=""
+            />
+          </button>
+
+        </div>
+
+        <!-- Icon + Title -->
+        <div class="hero" aria-label="Tap to Pay header">
+          <img
+            class="hero-icon"
+            src="assets/contactless_big.svg"
+            alt=""
+          />
+          <h1 class="hero-title">Tap to Pay</h1>
+        </div>
+
+        <!-- Cards -->
+        <div class="stack" aria-label="Payment summary cards">
+          <div class="card" role="group" aria-label="Guest and room details">
+            <div class="row">
+              <div class="left">Guest</div>
+              <div class="right">Full Name</div>
+            </div>
+            <div class="row">
+              <div class="left">Room Number</div>
+              <div class="right">000</div>
+            </div>
+          </div>
+
+          <div class="card" role="group" aria-label="Total amount">
+            <div class="row">
+              <div class="left">Total Amount</div>
+              <div class="right">$ 00.00</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

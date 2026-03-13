@@ -1,0 +1,438 @@
+<!-- cardPayment.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Details</title>
+
+  <style>
+    :root{
+      --bg:#f2f2f2;
+      --surface:#ffffff;
+      --border:#d9d9d9;
+      --text:#1e1e1e;
+      --muted:#b3b3b3;
+      --divider:#bfbfbf;
+      --brand:#2c2c2c;
+
+      --pad:24px;
+      --gap:24px;
+      --radius-sm:4px;
+      --radius:8px;
+
+      --shadow:0px 1px 2px rgba(0,0,0,.30), 0px 1px 3px rgba(0,0,0,.15);
+
+      --progress-bg:#e1e1e1;
+      --progress-fill:#000;
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    input, select, textarea, button{
+      font-family: inherit;
+      font-size:16px;
+      font-weight:400;
+      color:var(--text);
+    }
+
+    /* Centered mobile frame (393px artboard) */
+    .app{
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+    }
+    .frame{
+      width:100%;
+      max-width:393px;
+      min-height:100vh;
+      background:var(--bg);
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* Top App Bar */
+    .topbar{
+      background:var(--surface);
+      padding:var(--pad);
+      box-shadow:var(--shadow);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      overflow:hidden;
+    }
+    .title{
+      margin:0;
+      font-weight:700;
+      font-size:20px;
+      line-height:1.2;
+      text-align:center;
+      white-space:nowrap;
+      flex:1 1 auto;
+    }
+    .icon-btn{
+      border:0;
+      background:transparent;
+      padding:0;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:6px;
+      flex:0 0 auto;
+    }
+    .icon-btn.close{
+      width:24px;
+      height:24px;
+    }
+    .icon-btn:focus{
+      outline:2px solid rgba(0,0,0,.25);
+      outline-offset:2px;
+    }
+    .icon-16{ width:16px; height:16px; display:block; }
+    .icon-24{ width:24px; height:24px; display:block; }
+
+    /* Progress Bar (steps 1–3 filled, step 4 empty) */
+    .progress{
+      height:4px;
+      width:100%;
+      background:var(--progress-bg);
+      display:flex;
+      overflow:hidden;
+    }
+    .step{ flex:1; }
+    .step.filled{ background:var(--progress-fill); }
+
+    /* Content */
+    .content{
+      flex:1;
+      padding:var(--pad);
+      overflow:auto;
+      display:flex;
+      flex-direction:column;
+      gap:var(--gap);
+    }
+
+    .card{
+      width:100%;
+      background:var(--surface);
+      border-radius:var(--radius-sm);
+      box-shadow:var(--shadow);
+      padding:24px 16px;
+      overflow:hidden;
+    }
+
+    .row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      white-space:nowrap;
+      width:100%;
+    }
+
+    .left{
+      font-weight:600;
+      font-size:16px;
+      line-height:1.2;
+      letter-spacing:.5px;
+      color:#000;
+    }
+    .right{
+      font-weight:400;
+      font-size:16px;
+      line-height:1;
+      text-align:right;
+      max-width:60%;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    /* Tap to Pay button */
+    .tap-btn{
+      width:100%;
+      height:44px;
+      border:1px solid var(--brand);
+      border-radius:var(--radius);
+      background:var(--brand);
+      color:#f5f5f5;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:12px;
+      cursor:pointer;
+    }
+    .tap-btn:active{ transform: translateY(1px); }
+    .tap-btn:focus{
+      outline:2px solid rgba(0,0,0,.25);
+      outline-offset:2px;
+    }
+    .tap-btn span{
+      font-size:16px;
+      line-height:1;
+    }
+    .tap-icon{
+      width:20px;
+      height:20px;
+      display:block;
+    }
+
+    /* OR divider */
+    .or{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:24px;
+      width:100%;
+    }
+    .or-line{
+      height:1px;
+      background:var(--divider);
+      flex:1;
+    }
+    .or-text{
+      font-size:16px;
+      line-height:1;
+      color:var(--text);
+      white-space:nowrap;
+    }
+
+    /* Form fields */
+    .form{
+      display:flex;
+      flex-direction:column;
+      gap:24px;
+    }
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      width:100%;
+    }
+    .label{
+      font-weight:600;
+      font-size:16px;
+      line-height:1.4;
+    }
+    .control{
+      width:100%;
+      height:40px;
+      border:1px solid var(--border);
+      border-radius:var(--radius-sm);
+      background:#fff;
+      padding:12px 16px;
+      outline:none;
+    }
+    .control::placeholder{ color:var(--muted); }
+    .control:focus{
+      outline:2px solid rgba(0,0,0,.25);
+      outline-offset:2px;
+    }
+
+    .grid2{
+      display:flex;
+      gap:24px;
+      width:100%;
+    }
+    .grid2 .field{ flex:1; min-width:0; }
+
+    /* Bottom App Bar */
+    .bottombar{
+      background:var(--surface);
+      padding:var(--pad);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .primary-btn{
+      width:100%;
+      height:40px;
+      border:1px solid var(--brand);
+      border-radius:var(--radius);
+      background:var(--brand);
+      color:#f5f5f5;
+      cursor:pointer;
+    }
+    .primary-btn:active{ transform: translateY(1px); }
+    .primary-btn:focus{
+      outline:2px solid rgba(0,0,0,.25);
+      outline-offset:2px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <main class="frame" aria-label="Card Payment Screen">
+      <!-- Top App Bar -->
+      <header class="topbar" role="banner" aria-label="Top App Bar">
+        <button class="icon-btn" type="button" aria-label="Back">
+          <!-- simple back arrow -->
+          <svg class="icon-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3.825 9L9.425 14.6L8 16L0 8L8 0L9.425 1.4L3.825 7H16V9H3.825Z" fill="black"/>
+            </svg>
+        </button>
+
+        <h1 class="title">Payment Details</h1>
+
+        <button class="icon-btn close" type="button" aria-label="Close">
+          <!-- simple close -->
+          <svg class="icon-24" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18 6L6 18M6 6l12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </header>
+
+      <!-- Progress Bar -->
+      <div class="progress" aria-label="Progress">
+        <div class="step filled" aria-hidden="true"></div>
+        <div class="step filled" aria-hidden="true"></div>
+        <div class="step filled" aria-hidden="true"></div>
+        <div class="step" aria-hidden="true"></div>
+      </div>
+
+      <!-- Content -->
+      <section class="content" aria-label="Payment details content">
+        <!-- Total Amount card -->
+        <div class="card" role="group" aria-label="Total amount">
+          <div class="row">
+            <div class="left">Total Amount</div>
+            <div class="right">$ 00.00</div>
+          </div>
+        </div>
+
+        <!-- Tap to Pay -->
+        <button class="tap-btn" type="button" aria-label="Tap to Pay">
+          <!-- contactless icon -->
+          <svg class="tap-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M6.4 12.65C6.55 12.25 6.67083 11.8292 6.7625 11.3875C6.85417 10.9458 6.9 10.4833 6.9 10C6.9 9.51667 6.85417 9.05417 6.7625 8.6125C6.67083 8.17083 6.55 7.75 6.4 7.35L4.55 8.1C4.65 8.4 4.73333 8.70833 4.8 9.025C4.86667 9.34167 4.9 9.66667 4.9 10C4.9 10.3333 4.86667 10.6583 4.8 10.975C4.73333 11.2917 4.65 11.6 4.55 11.9L6.4 12.65ZM9.6 14C9.88333 13.3667 10.0875 12.7167 10.2125 12.05C10.3375 11.3833 10.4 10.7 10.4 10C10.4 9.3 10.3375 8.61667 10.2125 7.95C10.0875 7.28333 9.88333 6.63333 9.6 6L7.75 6.75C7.98333 7.25 8.15 7.77083 8.25 8.3125C8.35 8.85417 8.4 9.41667 8.4 10C8.4 10.5833 8.35 11.1458 8.25 11.6875C8.15 12.2292 7.98333 12.75 7.75 13.25L9.6 14ZM12.85 15.35C13.2 14.5167 13.4625 13.6542 13.6375 12.7625C13.8125 11.8708 13.9 10.95 13.9 10C13.9 9.05 13.8125 8.12917 13.6375 7.2375C13.4625 6.34583 13.2 5.48333 12.85 4.65L11 5.45C11.3 6.15 11.525 6.88333 11.675 7.65C11.825 8.41667 11.9 9.2 11.9 10C11.9 10.8 11.825 11.5833 11.675 12.35C11.525 13.1167 11.3 13.85 11 14.55L12.85 15.35ZM10 20C8.61667 20 7.31667 19.7375 6.1 19.2125C4.88333 18.6875 3.825 17.975 2.925 17.075C2.025 16.175 1.3125 15.1167 0.7875 13.9C0.2625 12.6833 0 11.3833 0 10C0 8.61667 0.2625 7.31667 0.7875 6.1C1.3125 4.88333 2.025 3.825 2.925 2.925C3.825 2.025 4.88333 1.3125 6.1 0.7875C7.31667 0.2625 8.61667 0 10 0C11.3833 0 12.6833 0.2625 13.9 0.7875C15.1167 1.3125 16.175 2.025 17.075 2.925C17.975 3.825 18.6875 4.88333 19.2125 6.1C19.7375 7.31667 20 8.61667 20 10C20 11.3833 19.7375 12.6833 19.2125 13.9C18.6875 15.1167 17.975 16.175 17.075 17.075C16.175 17.975 15.1167 18.6875 13.9 19.2125C12.6833 19.7375 11.3833 20 10 20ZM10 18C12.2333 18 14.125 17.225 15.675 15.675C17.225 14.125 18 12.2333 18 10C18 7.76667 17.225 5.875 15.675 4.325C14.125 2.775 12.2333 2 10 2C7.76667 2 5.875 2.775 4.325 4.325C2.775 5.875 2 7.76667 2 10C2 12.2333 2.775 14.125 4.325 15.675C5.875 17.225 7.76667 18 10 18Z" fill="white"/>
+        </svg>
+          <span>Tap to Pay</span>
+        </button>
+
+        <!-- OR divider -->
+        <div class="or" aria-hidden="true">
+          <div class="or-line"></div>
+          <div class="or-text">or</div>
+          <div class="or-line"></div>
+        </div>
+
+        <!-- Card entry form -->
+        <div class="form" role="group" aria-label="Card entry form">
+          <div class="field">
+            <label class="label" for="cardNumber">Card Number</label>
+            <input
+              class="control"
+              id="cardNumber"
+              name="cardNumber"
+              type="text"
+              inputmode="numeric"
+              autocomplete="cc-number"
+              placeholder="Enter Card Number"
+            />
+          </div>
+
+          <div class="grid2">
+            <div class="field">
+              <label class="label" for="expiry">Expiry Date</label>
+              <input
+                class="control"
+                id="expiry"
+                name="expiry"
+                type="text"
+                inputmode="numeric"
+                autocomplete="cc-exp"
+                placeholder="MM/YY"
+                maxlength="5"
+              />
+            </div>
+
+            <div class="field">
+              <label class="label" for="cvv">CVV/CVC</label>
+              <input
+                class="control"
+                id="cvv"
+                name="cvv"
+                type="password"
+                inputmode="numeric"
+                autocomplete="cc-csc"
+                placeholder="000"
+                maxlength="4"
+              />
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="nameOnCard">Name on Card</label>
+            <input
+              class="control"
+              id="nameOnCard"
+              name="nameOnCard"
+              type="text"
+              autocomplete="cc-name"
+              placeholder="Enter Name on Card"
+            />
+          </div>
+
+          <div class="field">
+            <label class="label" for="zip">Zip Code</label>
+            <input
+              class="control"
+              id="zip"
+              name="zip"
+              type="text"
+              inputmode="numeric"
+              autocomplete="postal-code"
+              placeholder="00000"
+              maxlength="5"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Bottom App Bar -->
+      <footer class="bottombar" role="contentinfo">
+        <button class="primary-btn" type="button">Proceed to Pay</button>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // Lightweight input helpers (optional)
+    const cardNumber = document.getElementById('cardNumber');
+    const expiry = document.getElementById('expiry');
+    const zip = document.getElementById('zip');
+    const cvv = document.getElementById('cvv');
+
+    // Format card number as "#### #### #### ####" while typing
+    cardNumber.addEventListener('input', () => {
+      const digits = cardNumber.value.replace(/\D/g, '').slice(0, 19);
+      const groups = digits.match(/.{1,4}/g) || [];
+      cardNumber.value = groups.join(' ');
+    });
+
+    // Format expiry as MM/YY
+    expiry.addEventListener('input', () => {
+      const digits = expiry.value.replace(/\D/g, '').slice(0, 4);
+      const mm = digits.slice(0, 2);
+      const yy = digits.slice(2, 4);
+      expiry.value = yy ? `${mm}/${yy}` : mm;
+    });
+
+    // Digits only for CVV + ZIP
+    cvv.addEventListener('input', () => {
+      cvv.value = cvv.value.replace(/\D/g, '').slice(0, 4);
+    });
+    zip.addEventListener('input', () => {
+      zip.value = zip.value.replace(/\D/g, '').slice(0, 5);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!-- cardPaymentProcessing.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Processing</title>
+
+  <style>
+    :root{
+      --page:#f2f2f2;
+      --canvas:#e8e8e8;
+      --surface:#ffffff;
+      --text:#1e1e1e;
+
+      --pad:24px;
+      --shadow:0px 1px 2px rgba(0,0,0,.30), 0px 1px 3px rgba(0,0,0,.15);
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
+
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:var(--page);
+      color:var(--text);
+    }
+
+    /* Centered mobile frame (393px artboard) */
+    .app{
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      background:var(--page);
+    }
+    .frame{
+      width:100%;
+      max-width:393px;
+      min-height:100vh;
+      background:var(--page);
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* Grey canvas area */
+    .canvas{
+      flex:1;
+      background:var(--canvas);
+      padding:var(--pad);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+
+    .stack{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:18px;
+    }
+
+    /* White rounded pill behind icon */
+    .icon-wrap{
+      width:64px;
+      height:64px;
+      background:var(--surface);
+      border-radius:52px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      box-shadow:none; /* matches Figma (no shadow on pill) */
+    }
+    .icon-wrap img{
+      width:24px;
+      height:24px;
+      display:block;
+    }
+
+    .status{
+      margin:0;
+      font-weight:600;
+      font-size:16px;
+      line-height:1.2;
+      letter-spacing:.5px;
+      color:#000;
+      text-align:center;
+      white-space:nowrap;
+    }
+
+    /* Dots take fixed width so text doesn't "jump" while animating */
+    .dots{
+      display:inline-block;
+      width: 1.6em; /* space for up to 3 dots */
+      text-align:left;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <main class="frame" aria-label="Card Payment Processing Screen">
+      <section class="canvas" aria-label="Processing state">
+        <div class="stack">
+          <div class="icon-wrap" aria-hidden="true">
+            <img
+              src="assets/credit_card.svg"
+              alt=""
+            />
+          </div>
+
+          <p class="status" aria-live="polite" aria-atomic="true">
+            Payment Processing<span id="dots" class="dots">...</span>
+          </p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Animate: "." -> ".." -> "..." -> repeat
+    (function animateDots(){
+      const dotsEl = document.getElementById('dots');
+      const frames = ['.', '..', '...'];
+      let i = 0;
+
+      // Start at "..." to match the static Figma copy, then animate
+      dotsEl.textContent = '...';
+
+      setInterval(() => {
+        dotsEl.textContent = frames[i % frames.length];
+        i++;
+      }, 450);
+    })();
+  </script>
+</body>
+</html>

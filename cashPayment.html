@@ -1,0 +1,297 @@
+<!-- cashPayment.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Details</title>
+
+  <style>
+    :root{
+      --bg:#f2f2f2;
+      --surface:#ffffff;
+      --text:#1e1e1e;
+      --brand:#2c2c2c;
+
+      --success-bg:#dbf4cf;
+
+      --pad:24px;
+      --gap:24px;
+      --radius-sm:4px;
+      --radius:8px;
+
+      --shadow:0px 1px 2px rgba(0,0,0,.30), 0px 1px 3px rgba(0,0,0,.15);
+
+      --progress-bg:#e1e1e1;
+      --progress-fill:#000;
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    /* Centered mobile frame (393px artboard) */
+    .app{
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+    }
+    .frame{
+      width:100%;
+      max-width:393px;
+      min-height:100vh;
+      background:var(--bg);
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* Top App Bar */
+    .topbar{
+      background:var(--surface);
+      padding:var(--pad);
+      box-shadow:var(--shadow);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      overflow:hidden;
+    }
+
+    .icon-btn{
+      border:0;
+      background:transparent;
+      padding:0;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:6px;
+      flex:0 0 auto;
+    }
+    .icon-btn:focus{
+      outline:2px solid rgba(0,0,0,.25);
+      outline-offset:2px;
+    }
+
+    .icon-16{ width:16px; height:16px; display:block; }
+    .icon-24{ width:14px; height:14px; display:block; }
+
+    .title{
+      margin:0;
+      font-weight:700;
+      font-size:20px;
+      line-height:1.2;
+      text-align:center;
+      white-space:nowrap;
+      flex:1 1 auto;
+    }
+
+    /* Progress Bar (all steps filled) */
+    .progress{
+      height:4px;
+      width:100%;
+      background:var(--progress-bg);
+      display:flex;
+      overflow:hidden;
+    }
+    .step{ flex:1; }
+    .step.filled{ background:var(--progress-fill); }
+
+    /* Content */
+    .content{
+        display: flex;
+        padding: 24px;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+        flex: 1 0 0;
+        align-self: stretch;
+    }
+
+    .card{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        flex: 1 0 0;
+        align-self: stretch;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.30), 0 1px 3px 1px rgba(0, 0, 0, 0.15);
+        border-radius: 50%;
+    }
+
+    .card-top{
+        background:var(--success-bg);
+        padding:24px 16px;
+        display: flex;
+        padding: 24px 16px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 18px;
+        flex: 1 0 0;
+        align-self: stretch;
+        border-radius: 4px 4px 0 0;
+        background: #DBF4CF;
+    }
+
+    .status{
+      display:flex;
+      align-items:center;
+      justify-content: center;
+      height: 64px;
+      width: 64px;
+      background-color: white;
+      text-align:center;
+      border-radius: 50%;
+    }
+
+    .status-icon{
+      width:22px;
+      height:22px;
+      display:block;
+    }
+
+    .status-title{
+      margin:0;
+      font-weight:600;
+      font-size:16px;
+      line-height:1.2;
+      letter-spacing:.5px;
+      color:#000;
+      white-space:nowrap;
+    }
+
+    .card-bottom{
+      background:var(--surface);
+      padding:24px 16px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      width: 100%;
+      border-radius:  0 0 4px 4px;
+    }
+
+    .row{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      white-space:nowrap;
+    }
+
+    .left{
+      font-weight:600;
+      font-size:16px;
+      line-height:1.2;
+      letter-spacing:.5px;
+      color:#000;
+    }
+
+    .right{
+      font-weight:400;
+      font-size:16px;
+      line-height:1;
+      color:var(--text);
+      text-align:right;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width:60%;
+    }
+
+    /* Bottom App Bar */
+    .bottombar{
+      background:var(--surface);
+      padding:var(--pad);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .primary-btn{
+      width:100%;
+      border:1px solid var(--brand);
+      background:var(--brand);
+      color:#f5f5f5;
+      padding:12px;
+      border-radius:var(--radius);
+      font-size:16px;
+      line-height:1;
+      cursor:pointer;
+    }
+
+    .primary-btn:active{ transform: translateY(1px); }
+    .primary-btn:focus{
+      outline:2px solid rgba(0,0,0,.25);
+      outline-offset:2px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <main class="frame" aria-label="Cash Payment Screen">
+      <!-- Top App Bar -->
+      <header class="topbar" role="banner" aria-label="Top App Bar">
+        <button class="icon-btn" type="button" aria-label="Back">
+          <img
+            class="icon-16"
+            src="assets/arrow_back.svg"
+            alt=""
+          />
+        </button>
+
+        <h1 class="title">Payment Details</h1>
+
+        <button class="icon-btn" type="button" aria-label="Close">
+          <img
+            class="icon-24"
+            src="assets/close.svg"
+            alt=""
+          />
+        </button>
+      </header>
+
+      <!-- Progress Bar -->
+      <div class="progress" aria-label="Progress">
+        <div class="step filled" aria-hidden="true"></div>
+        <div class="step filled" aria-hidden="true"></div>
+        <div class="step filled" aria-hidden="true"></div>
+        <div class="step filled" aria-hidden="true"></div>
+      </div>
+
+      <!-- Content -->
+      <section class="content" aria-label="Cash payment content">
+        <div class="card" role="group" aria-label="Record cash payment">
+          <div class="card-top">
+            <div class="status">
+              <img
+                class="status-icon"
+                src="assets/paid.svg"
+                alt=""
+              />
+            </div>
+            <p class="status-title">Record Cash Payment</p>
+          </div>
+
+          <div class="card-bottom">
+            <div class="row">
+              <div class="left">Total Amount</div>
+              <div class="right">$ 00.00</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bottom App Bar -->
+      <footer class="bottombar" role="contentinfo">
+        <button class="primary-btn" type="button">Yes</button>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

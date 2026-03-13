@@ -1,0 +1,219 @@
+<!-- returningGuest.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Returning Guest</title>
+
+  <style>
+    :root{
+      --bg:#f2f2f2;
+      --surface:#ffffff;
+      --text:#1e1e1e;
+      --divider:#bfbfbf;
+      --brand:#2c2c2c;
+
+      --pad:24px;
+      --gap:24px;
+      --radius-sm:4px;
+      --radius:8px;
+
+      --shadow:0px 1px 2px rgba(0,0,0,.30), 0px 1px 3px rgba(0,0,0,.15);
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    /* Centered mobile frame (393px artboard) */
+    .app{
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+    }
+    .frame{
+      width:100%;
+      max-width:393px;
+      min-height:100vh;
+      background:var(--bg);
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* Top App Bar */
+    .topbar{
+      background:var(--surface);
+      padding:var(--pad);
+      box-shadow:var(--shadow);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+    .title{
+      margin:0;
+      font-weight:700;
+      font-size:20px;
+      line-height:1.2;
+      text-align:center;
+      white-space:nowrap;
+    }
+
+    /* Body */
+    .content{
+      flex:1;
+      padding:var(--pad);
+      overflow:auto;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+    }
+
+    .card{
+      width:100%;
+      background:var(--surface);
+      border-radius:var(--radius-sm);
+      box-shadow:var(--shadow);
+      padding:24px 16px;
+      display:flex;
+      flex-direction:column;
+      gap:24px;
+      overflow:hidden;
+    }
+
+    .row{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      white-space:nowrap;
+    }
+
+    .left{
+      font-weight:600;
+      font-size:16px;
+      line-height:1.2;
+      letter-spacing:.5px;
+      color:#000;
+    }
+
+    .left.normal{
+      letter-spacing:0;
+      line-height:1.4;
+    }
+
+    .right{
+      font-weight:400;
+      font-size:16px;
+      line-height:1;
+      color:var(--text);
+      text-align:right;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: 60%;
+    }
+
+    .divider{
+      height:1px;
+      width:100%;
+      background:var(--divider);
+      flex:0 0 auto;
+    }
+
+    /* Bottom App Bar */
+    .bottombar{
+      background:var(--surface);
+      padding:var(--pad);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .buttons{
+      display:flex;
+      gap:24px;
+      width:100%;
+    }
+
+    .btn{
+      flex:1;
+      border:1px solid var(--brand);
+      background:var(--brand);
+      color:#f5f5f5;
+      padding:12px;
+      border-radius:var(--radius);
+      font-size:16px;
+      line-height:1;
+      cursor:pointer;
+    }
+
+    .btn:active{ transform: translateY(1px); }
+    .btn:focus{
+      outline:2px solid rgba(0,0,0,.25);
+      outline-offset:2px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <main class="frame" aria-label="Returning Guest Screen">
+      <!-- Top App Bar -->
+      <header class="topbar" role="banner">
+        <h1 class="title">Returning Guest</h1>
+      </header>
+
+      <!-- Body -->
+      <section class="content" aria-label="Returning guest details">
+        <div class="card" role="group" aria-label="Guest summary card">
+          <div class="row">
+            <div class="left">Guest</div>
+            <div class="right">Full Name</div>
+          </div>
+
+          <div class="row">
+            <div class="left normal">ID Number</div>
+            <div class="right">0000000000</div>
+          </div>
+
+          <div class="row">
+            <div class="left normal">ID Type</div>
+            <div class="right">ID/DL/Passport</div>
+          </div>
+
+          <div class="divider" aria-hidden="true"></div>
+
+          <div class="row">
+            <div class="left">Rating</div>
+            <div class="right">0.00</div>
+          </div>
+
+          <div class="row">
+            <div class="left">Active Since</div>
+            <div class="right">Time and Date</div>
+          </div>
+
+          <div class="row">
+            <div class="left">Latest Activity</div>
+            <div class="right">Time and Date</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bottom App Bar -->
+      <footer class="bottombar" role="contentinfo">
+        <div class="buttons">
+          <button class="btn" type="button" style="background-color:#C9C9C9; color:#1E1E1E; border: none;">Cancel</button>
+          <button class="btn" type="button">Proceed</button>
+        </div>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

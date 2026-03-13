@@ -1,0 +1,459 @@
+<!-- stayDetails.html (clean + updated dropdowns + back button per latest Figma frame) -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stay Details</title>
+
+  <style>
+    :root{
+      --bg:#f2f2f2;
+      --surface:#ffffff;
+      --border:#d9d9d9;
+      --text:#1e1e1e;
+      --brand:#2c2c2c;
+
+      --pad:24px;
+      --gap:24px;
+      --radius-sm:4px;
+      --radius:8px;
+      --shadow:0px 1px 2px rgba(0,0,0,.30), 0px 1px 3px rgba(0,0,0,.15);
+
+      --progress-bg:#e1e1e1;
+      --progress-fill:#000;
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    /* Centered mobile frame (393px artboard) */
+    .app{
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+    }
+    .frame{
+      width:100%;
+      max-width:393px;
+      min-height:100vh;
+      background:var(--bg);
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* Top App Bar */
+    .topbar{
+      background:var(--surface);
+      padding:var(--pad);
+      box-shadow:var(--shadow);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      overflow:hidden;
+    }
+    .icon-btn{
+      border:0;
+      background:transparent;
+      padding:0;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:6px;
+      flex:0 0 auto;
+    }
+    .icon-btn:focus{
+      outline:2px solid rgba(0,0,0,.25);
+      outline-offset:2px;
+    }
+    .icon-btn.back img{
+      width:16px;
+      height:16px;
+      display:block;
+    }
+    .icon-btn.close{
+      padding:4px; /* matches Figma close button padding */
+    }
+    .icon-btn.close img{
+      width:14px;
+      height:14px;
+      display:block;
+    }
+
+    .title{
+      margin:0;
+      font-weight:700;
+      font-size:20px;
+      line-height:1.2;
+      text-align:center;
+      white-space:nowrap;
+      flex:1 1 auto;
+    }
+
+    /* Progress Bar (Step 1 + 2 filled) */
+    .progress{
+      height:4px;
+      width:100%;
+      background:var(--progress-bg);
+      display:flex;
+      overflow:hidden;
+    }
+    .step{ flex:1; }
+    .step.filled{ background:var(--progress-fill); }
+
+    /* Content */
+    .content{
+      flex:1;
+      padding:var(--pad);
+      display:flex;
+      flex-direction:column;
+      gap:var(--gap);
+      overflow:auto;
+    }
+
+    .row{
+      display:flex;
+      gap:24px;
+      width:100%;
+    }
+    .row .field{ flex:1; min-width:0; }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      width:100%;
+    }
+    .label{
+      font-weight:600;
+      font-size:16px;
+      line-height:1.4;
+    }
+
+    .control{
+      width:100%;
+      height:40px;
+      border:1px solid var(--border);
+      border-radius:var(--radius-sm);
+      background:#fff;
+      padding:12px 16px;
+      font-size:16px;
+      line-height:1;
+      outline:none;
+      color:var(--text);
+    }
+    .control::placeholder{ color:#b3b3b3; }
+
+    /* Select styling with chevron icon */
+    select.control{
+      appearance:none;
+      -webkit-appearance:none;
+      -moz-appearance:none;
+      background-image:url("assets/chevron down.svg"); /* Replace with actual chevron icon URL */
+      background-repeat:no-repeat;
+      background-position:right 12px center;
+      background-size:16px 16px;
+    }
+
+    /* Date inputs (with calendar icon) */
+    .date-wrap{
+      position:relative;
+      width:100%;
+    }
+    .date-wrap input{
+      padding-right:40px;
+    }
+    .date-wrap::after{
+      content:"";
+      position:absolute;
+      right:12px;
+      top:50%;
+      width:16px;
+      height:16px;
+      transform:translateY(-50%);
+      background-image:url("assets/Calendar.svg");
+      background-repeat:no-repeat;
+      background-size:16px 16px;
+      pointer-events:none;
+    }
+
+    /* Bottom App Bar */
+    .bottombar{
+      background:var(--surface);
+      padding:var(--pad);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .primary-btn{
+      width:100%;
+      border:1px solid var(--brand);
+      background:var(--brand);
+      color:#f5f5f5;
+      padding:12px;
+      border-radius:var(--radius);
+      font-size:16px;
+      line-height:1;
+      cursor:pointer;
+    }
+    .primary-btn:active{ transform: translateY(1px); }
+    .primary-btn:focus{
+      outline:2px solid rgba(0,0,0,.25);
+      outline-offset:2px;
+    }
+
+    /* Remove default browser calendar icon */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  display: none;
+  -webkit-appearance: none;
+}
+
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-clear-button {
+  display: none;
+}
+
+input[type="date"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+}
+
+/* Ensure ALL inputs use the same font */
+.control,
+input,
+select,
+textarea {
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text);
+}
+
+/* Remove native calendar icon */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  display: none;
+  -webkit-appearance: none;
+}
+
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-clear-button {
+  display: none;
+}
+
+input[type="date"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+}
+
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <main class="frame" aria-label="Stay Details Screen">
+      <!-- Top App Bar -->
+      <header class="topbar" role="banner" aria-label="Top App Bar">
+        <button class="icon-btn back" type="button" aria-label="Back">
+          <img
+            src="assets/arrow_back.svg"
+            alt=""
+          />
+        </button>
+
+        <h1 class="title">Stay Details</h1>
+
+        <button class="icon-btn close" type="button" aria-label="Close">
+          <img
+            src="assets/close.svg"
+            alt=""
+          />
+        </button>
+      </header>
+
+      <!-- Progress Bar -->
+      <div class="progress" aria-label="Progress">
+        <div class="step filled" aria-hidden="true"></div>
+        <div class="step filled" aria-hidden="true"></div>
+        <div class="step" aria-hidden="true"></div>
+        <div class="step" aria-hidden="true"></div>
+      </div>
+
+      <!-- Body -->
+      <form class="content" autocomplete="on">
+        <div class="row">
+          <div class="field">
+            <label class="label" for="checkin">Check-in</label>
+            <div class="date-wrap">
+              <input class="control" id="checkin" name="checkin" type="date" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="checkout">Check-out</label>
+            <div class="date-wrap">
+              <input class="control" id="checkout" name="checkout" type="date" />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label class="label" for="adults">Adults</label>
+            <select class="control" id="adults" name="adults">
+              <option value="" selected>Select</option>
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label class="label" for="children">Children</label>
+            <select class="control" id="children" name="children">
+              <option value="" selected>Select</option>
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label" for="room">Select Room</label>
+          <select class="control" id="room" name="room">
+            <option value="" selected>Select</option>
+
+            <!-- 200–230 (with your type mapping). Room 200 not specified; keeping consistent label. -->
+            <option value="200">200 - King</option>
+
+            <!-- King Size: 201–205, 224–230 -->
+            <option value="201">201 - King</option>
+            <option value="202">202 - King</option>
+            <option value="203">203 - King</option>
+            <option value="204">204 - King</option>
+            <option value="205">205 - King</option>
+
+            <option value="224">224 - King</option>
+            <option value="225">225 - King</option>
+            <option value="226">226 - King</option>
+            <option value="227">227 - King</option>
+            <option value="228">228 - King</option>
+            <option value="229">229 - King</option>
+            <option value="230">230 - King</option>
+
+            <!-- Single Studio: 206, 209, 212, 215, 218 -->
+            <option value="206">206 - Single Studio</option>
+            <option value="209">209 - Single Studio</option>
+            <option value="212">212 - Single Studio</option>
+            <option value="215">215 - Single Studio</option>
+            <option value="218">218 - Single Studio</option>
+
+            <!-- Double Bed: 207, 208, 210, 211, 213, 214 -->
+            <option value="207">207 - Double Bed</option>
+            <option value="208">208 - Double Bed</option>
+            <option value="210">210 - Double Bed</option>
+            <option value="211">211 - Double Bed</option>
+            <option value="213">213 - Double Bed</option>
+            <option value="214">214 - Double Bed</option>
+
+            <!-- Queen Size: 216, 217, 219–223 -->
+            <option value="216">216 - Queen Size</option>
+            <option value="217">217 - Queen Size</option>
+            <option value="219">219 - Queen Size</option>
+            <option value="220">220 - Queen Size</option>
+            <option value="221">221 - Queen Size</option>
+            <option value="222">222 - Queen Size</option>
+            <option value="223">223 - Queen Size</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="label" for="rate">Daily Rate</label>
+          <select class="control" id="rate" name="rate">
+            <option value="" selected>Select</option>
+            <option value="king-75">King Size - $75</option>
+            <option value="queen-65">Queen Size - $65</option>
+            <option value="double-85">Double Bed - $85</option>
+            <option value="studio-75">Studio - $75</option>
+            <option value="studio-weekly-50">Studio Weekly - $50</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="label" for="deposit">Deposit</label>
+          <input class="control" id="deposit" name="deposit" type="text" placeholder="Enter Deposit" />
+        </div>
+
+        <div class="field">
+          <label class="label" for="discount">Discount</label>
+          <input class="control" id="discount" name="discount" type="text" placeholder="Enter Discount Amount" />
+        </div>
+      </form>
+
+      <!-- Bottom App Bar -->
+      <footer class="bottombar" role="contentinfo">
+        <button class="primary-btn" type="button">Next</button>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    (function setupDates(){
+      const checkin = document.getElementById('checkin');
+      const checkout = document.getElementById('checkout');
+
+      const toLocalISO = (d) => {
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      };
+
+      const syncCheckoutMin = () => {
+        if (!checkin.value) return;
+        checkout.min = checkin.value;
+        if (checkout.value && checkout.value < checkin.value) {
+          checkout.value = checkin.value;
+        }
+      };
+
+      if (!checkin.value && !checkout.value) {
+        const d1 = new Date();
+        const d2 = new Date();
+        d2.setDate(d1.getDate() + 2);
+
+        checkin.value = toLocalISO(d1);
+        checkout.value = toLocalISO(d2);
+      }
+
+      checkin.min = toLocalISO(new Date());
+      syncCheckoutMin();
+
+      checkin.addEventListener('change', syncCheckoutMin);
+
+      [checkin, checkout].forEach((input) => {
+        input.addEventListener('click', () => {
+          if (typeof input.showPicker === 'function') {
+            input.showPicker();
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

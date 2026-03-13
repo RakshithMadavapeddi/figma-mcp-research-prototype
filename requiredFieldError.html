@@ -1,0 +1,114 @@
+<!-- requireFieldError.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Required Field Error</title>
+
+  <style>
+    :root{
+      --danger:#d90000;
+      --text:#ffffff;
+
+      --radius:8px;
+      --pad:16px;
+      --gap:16px;
+
+      --shadow: 0px 4px 8px rgba(0,0,0,0.15), 0px 1px 3px rgba(0,0,0,0.30);
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
+
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:#ffffff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+
+    /* Snackbar */
+    .snackbar{
+      width:min(520px, 100%);
+      background:var(--danger);
+      color:var(--text);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:var(--pad);
+      display:flex;
+      align-items:center;
+      gap:var(--gap);
+    }
+
+    .icon{
+      width:20px;
+      height:20px;
+      flex:0 0 auto;
+      display:block;
+    }
+
+   
+
+    .message{
+      flex:1 1 auto;
+      min-width:0;
+      margin:0;
+      font-weight:600;
+      font-size:16px;
+      line-height:1.4;
+    }
+
+    .close{
+      border:0;
+      background:transparent;
+      padding:0;
+      cursor:pointer;
+      flex:0 0 auto;
+      width:20px;
+      height:20px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:6px;
+    }
+
+    .close:focus{
+      outline:2px solid rgba(255,255,255,.6);
+      outline-offset:2px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="snackbar" role="alert" aria-live="assertive" aria-label="Required fields error notification">
+    <img
+      class="icon"
+      src="assets/Info.svg"
+      alt=""
+      aria-hidden="true"
+    />
+
+    <p class="message">Please Complete All the Required Fields.</p>
+
+    <button class="close" type="button" aria-label="Dismiss notification" id="dismissBtn">
+      <img
+        class="icon-small"
+        src="assets/close_small.svg"
+        alt=""
+        aria-hidden="true"
+      />
+    </button>
+  </div>
+
+  <script>
+    // Optional dismiss behavior
+    document.getElementById('dismissBtn').addEventListener('click', () => {
+      document.querySelector('.snackbar').style.display = 'none';
+    });
+  </script>
+</body>
+</html>
